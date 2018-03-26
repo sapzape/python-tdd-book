@@ -10,6 +10,11 @@ class NewVisitorTest(unittest.TestCase):
 
     def tearDown(self):
         self.browser.quit()
+    
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # 에디트(Edith)는 멋진 작업 목록 온라인 앱이 나왔다는 소식을 듣고
@@ -36,22 +41,23 @@ class NewVisitorTest(unittest.TestCase):
         # "1: 공작깃털 사기" 아이템이 추가된다
         input_box.send_keys(Keys.ENTER)
         time.sleep(1)
-
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: 공작깃털 사기' for row in rows),
-            "신규 작업이 테이블에 표시되지 않는다"
-        )
+        self.check_for_row_in_list_table('1: 공작깃털 사기')
 
         # 추가 아이템을 입력할 수 있는 여분의 텍스트 상자가 존재한다
         # 다시 "공작깃털을 이용해서 그물 만들기"라고 입력한다 (에디스는 매우 채계적인 사람이다)
-        self.fail('Finish the test!')
+        input_box = self.browser.find_element_by_id('id_new_item')
+        input_box.send_keys('공작깃털을 이용해서 그물 만들기')
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(1)
 
         # 페이지는 다시 갱신되고, 두 개 아이템이 목록에 보인다
+        self.check_for_row_in_list_table('2: 공작깃털을 이용해서 그물 만들기')
+        self.check_for_row_in_list_table('1: 공작깃털 사기')
+
         # 에디스는 사이트가 입력한 목록을 저장하고 있는지 궁금하다
         # 사이트는 그녀를 위한 특정 URL을 생성해준다
         # 이때 URL에 대한 설명도 함께 제공된다
+        self.fail('Finish the test!')
 
         # 해당 URL에 접속하면 그녀가 만든 작업 목록이 그대로 있는 것을 확인할 수 있다
 
