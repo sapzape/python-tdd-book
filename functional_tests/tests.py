@@ -77,9 +77,9 @@ class NewVisitorTest(LiveServerTestCase):
         # Edith start a new to-do list
         self.browser.get(self.live_server_url)
         input_box = self.browser.find_element_by_id('id_new_item')
-        input_box.send_keys('공장깃털 사기')
+        input_box.send_keys('공작깃털 사기')
         input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: 공장깃털 사기')
+        self.wait_for_row_in_list_table('1: 공작깃털 사기')
 
         # She notices that her list has a unique URL
         edith_list_url = self.browser.current_url
