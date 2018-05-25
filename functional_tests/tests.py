@@ -67,7 +67,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 에디스는 사이트가 입력한 목록을 저장하고 있는지 궁금하다
         # 사이트는 그녀를 위한 특정 URL을 생성해준다
         # 이때 URL에 대한 설명도 함께 제공된다
-        self.fail('Finish the test!')
+        # self.fail('Finish the test!')
 
         # 해당 URL에 접속하면 그녀가 만든 작업 목록이 그대로 있는 것을 확인할 수 있다
 
@@ -115,3 +115,28 @@ class NewVisitorTest(LiveServerTestCase):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('공작깃털 사기', page_text)
         self.assertIn('우유 사기', page_text)
+
+    def test_layout_and_styling(self):
+        # Edith goes to the home page
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        # She notice the input box is nicely centered
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta=10
+        )
+
+        # She starts a new list and sees the input is nicely
+        # centerd there too
+        inputbox.send_keys('testing')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: testing')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta=10
+        )
