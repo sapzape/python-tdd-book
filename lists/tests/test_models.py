@@ -71,6 +71,12 @@ class ListModelTest(TestCase):
         user = User.objects.create(email='a@b.com')
         list_ = List.objects.create(owner=user)
         self.assertIn(list_, user.list_set.all())
-        
+
     def test_list_owner_is_optional(self):
         List.objects.create()
+
+    def test_list_name_is_first_item_text(self):
+        list_ = List.objects.create()
+        Item.objects.create(list=list_, text='first item')
+        Item.objects.create(list=list_, text='second item')
+        self.assertEqual(list_.name, 'first item')
