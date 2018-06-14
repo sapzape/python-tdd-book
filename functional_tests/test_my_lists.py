@@ -3,7 +3,7 @@ from .base import FunctionalTest
 from .server_tools import create_session_on_server
 from .management.commands.create_session import create_pre_authenticated_session
 
-class MyListTeset(FunctionalTest):
+class MyListTest(FunctionalTest):
     
     def create_pre_authenticated_session(self, email):
         if self.staging_server:
